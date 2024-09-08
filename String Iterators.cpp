@@ -1,3 +1,14 @@
+/*
+Napišite program koji od korisnika učitava tekst (do EOF). 
+Tekst predstavlja tekst matematičkog zadatka u kojem se javljaju podaci o nekim duljinama iskazanima u milimetrima, centimetrima ili decimetrima 
+(svaki takav podatak koji promatramo sastoji se od jednog pozitivnog broja, bez predznaka i možda s decimalnom točkom, te pripadne mjerne jedinice).
+Pritom se za mjerne jedinice koriste puni nazivi ili oznake mm, cm ili dm. 
+Potrebno je preračunati i prikazati te duljine u metrima (uz pripadni puni naziv ili oznaku m, ovisno o tome je li u unesenom tekstu bio puni naziv ili je bila oznaka - vidi primjere!). 
+Između mjerne jedinice i pripadnog broja može se nalaziti proizvoljan broj praznina (smatramo da su praznine sljedeći znakovi: ' ', '\t', '\n', '\v', '\f', '\r'). 
+Pripazite da razmaci i prelasci u novi red budu očuvani! 
+Pretpostavite da u tekstu koji je korisnik unio nema složenih mjernih jedinica (tako se u ulazu, primjerice, ne može javiti tekst "...ima brzinu 5 dm/h.").
+*/
+
 #include <iostream>
 #include <string>
 #include <vector>
