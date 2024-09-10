@@ -1,52 +1,40 @@
 /*
-Datoteka prodaja.txt sadrži podatke o prodanim kartama jedne autobusne tvrtke. Za svaku kartu upisani su u tu datoteku sljedeći podaci (svaki u posebnom retku!):
+The file prodaja.txt contains data about sold tickets from a bus company. For each ticket, the following data is recorded in the file (each on a separate line!):
 
-naziv polazišta,
- naziv odredišta,
-cijena (broj koji predstavlja iznos u EUR),
-tip karte (npr. jednosmjerna),
-datum i vrijeme polaska (oblika mm:hh dd.MM.yyyy).
-U datoteci nakon podataka za pojedinu kartu mogu postojati ,,prazni'' retci, preciznije, retci koji sadrže samo bjeline (bjeline su ' ', '\f', '\n', '\r', '\t', '\v') - takve retke zanemarite.
+- starting location,
+- destination,
+- price (a number representing the amount in EUR),
+- ticket type (e.g., one-way),
+- departure date and time (in the format mm:hh dd.MM.yyyy).
 
-Definirajte strukturu relacija koja pamti podatke o jednoj relaciji i to:
+After the data for each ticket, there may be "empty" lines in the file, specifically lines that contain only whitespace (whitespace includes ' ', '\f', '\n', '\r', '\t', '\v') - ignore such lines.
 
-naziv polazišta za tu relaciju,
- naziv odredišta za tu relaciju.
-Korištenjem neuređenog višestrukog preslikavanja - preciznije, unordered_multimap spremnika uz minimalno 10 pretinaca, učitajte podatke o kartama iz datoteke prodaja.txt tako da za svaku liniju imamo spremljene podatke o kartama za tu liniju. Naposlijetku, ispišite na ekran sve učitane podatke po pretincima, na način da se prvo ispiše broj pretinca te zatim svi podaci iz tog pretinca - svaki redak mora biti u formatu:
+Define a structure for relations that stores data about a single relation, specifically:
 
-(polazište, odredište) -> x EUR, tip, datum i vrijeme
-Nemojte ispisivati podatke o praznim pretincima. Pri definiranju vlastite hash-funkcije, kratko obrazložite u komentar u svom kodu odabir te hash-funkcije.
+- starting location for that relation,
+- destination for that relation.
+
+Using an unordered multi-map container with at least 10 buckets, load the ticket data from the file prodaja.txt so that for each line, we have the ticket data stored for that line. Finally, print all loaded data by bucket, first printing the bucket number and then all data from that bucket - each line must be in the format:
+
+(starting location, destination) -> x EUR, type, date and time
+
+Do not print data about empty buckets. When defining your own hash function, briefly explain in a comment in your code the choice of that hash function.
 */
 
 
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <unordered_map>
-#include <tuple>
-#include <utility>
-#include <algorithm>
-
-using namespace std;
-
 /*
-    spremnik u koji cemo spremati:  
-    - cijenu
-    - datum
-    - vrijeme  |
+    Container we will use to store:
+    - price
+    - date
+    - time  |
                |
                v
 */
 typedef tuple<string,string,string> info;
 
-struct relacija{
-    string start,end;
-};
-
 /*
-    Nasa hash funkcija - napravljena analogno kao
-                         hash funkcija s vjezbi
+    Our hash function - created analogously to
+                         the hash function from the exercise
 */
 size_t relacija_h(const relacija &R){
     return  hash<string>()(R.start) ^
@@ -54,8 +42,8 @@ size_t relacija_h(const relacija &R){
 }
 
 /*
-    definiramo operator == tako da mozemo
-    definirati potrebni neuređeni spremnik
+    Define operator == so we can
+    define the required unordered container
 */
 bool operator == (const relacija &R1, const relacija &R2)
 {
@@ -63,9 +51,9 @@ bool operator == (const relacija &R1, const relacija &R2)
 }
 
 /*
-    funckija koja mice znakove \r iz 
-    spremnika
-    remove() je funkcija iz <algorithm>
+    Function that removes \r characters from
+    the container
+    remove() is a function from <algorithm>
 */
 void ocisti(relacija &R, info &I){
 
@@ -88,14 +76,14 @@ int main() {
     while( getline(dat,s) ){
 
         /*
-            provjera ako smo ucitali prazan redak
+            Check if we have read an empty line
         */
         if(  s.find_first_not_of(" \f\n\r\t\v") == string::npos )
             continue;
 
         /*
-            ucitavamo podatke iz datoteke i ubacujemo ih 
-            u multimap
+            Read data from the file and insert it
+            into the multimap
         */
         relacija R;
         R.start = s;
@@ -114,12 +102,12 @@ int main() {
         M.insert({R,I});
     }
 
-    //ispis svih elemenata
+    // Print all elements
     for(int i = 0 ; i < M.bucket_count() ; i++){
         if( !M.bucket_size(i) )
             continue;
 
-        cout << "Elementi u pretincu " << i << ":" << endl;
+        cout << "Elements in bucket " << i << ":" << endl;
         for( auto it = M.begin(i) ; it != M.end(i) ; it++ )
             cout << "\t(" << it->first.start << "," << it->first.end 
             << ") -> " << get<0>(it->second) << " EUR, " 
