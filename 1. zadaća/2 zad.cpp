@@ -1,3 +1,19 @@
+/*
+    Napišite funkciju 
+
+bool provjeri(const deque<char> &znakovi)
+koja prima referencu na deque znakova te uz korištenje iteratora i obrnutih iteratora provjerava predstavlja li taj niz znakova palindrom,
+tj. slova tog niza čitana od početka prema kraju ili obrnuto glase jednako.
+Primjerice, "Idu ljudi!" ili "Idu ljeta, pate ljudi".
+Funkcija mora vratiti podatak tipa bool koji predstavlja informaciju je li dobiveni podatak palindom ili nije palindrom u gore opisanom smislu.
+Zatim napišite funkciju main u kojoj ćete prvo učitati od korisnika pozitivan cijeli broj k.
+Nakon toga učitavajte od korisnika znakove (ako učitavate znak po znak, kako se ne bi ignorirale bjeline, prije učitavanja prvog znaka stavite cin << noskipws; ).
+Za svakih k uzastopih slova u unesenim znakovima, pomoću upravo napisane funkcije provjerite predstavljaju li oni palindrom. 
+Sve takve pronađene palindrome spremite u listu i na kraju ih ispišite na ekran (u redoslijedu u kojem su uneseni). 
+Pri ispisu, svaki palindrom mora biti ispisan u zasebnom retku (ako se u nekom javlja znak '\n', tada umjesto tog znaka ispišite znak ' '). 
+Također, pri ispisu palindroma, ispišite samo znakove palindroma koji su razmaci ili slova (te nemojte ispisivati bjeline prije prvog slova palindroma, ako takve postoje).
+*/
+
 #include <iostream>
 #include <list>
 #include <deque>
