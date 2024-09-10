@@ -1,20 +1,18 @@
-
 /*
-Napišite program koji radi rangiranje filmova prema ocjenama publike.
- Naziv filma je ujedno i naziv .txt datoteke. 
- Primjerice, za film s nazivom "Gospodar podataka - Povratak prioritetnog reda" imamo datoteku Gospodar podataka - Povratak prioritetnog reda.txt. 
-Svaka datoteka sadrži ocjene publike (barem jednu!) za film s tim nazivom, a svaka ocjena je prirodan broj manji ili jednak 5.
-Potrebno je napraviti strukturu film koja sadrži sve navedene podatke o pojedinom filmu (naziv filma i sve ocjene za taj film,
-uz ostale podatke za koje smatrate da ih treba pamtiti).
-Zatim treba korištenjem prikladnog spremnika (ili adaptera) spremiti podatke o svim filmovima čije nazive odgovarajućih datoteke (bez ekstenzije ".txt") 
-program prima kao argumente komandne linije (ne treba provjeravati uspješnost otvaranja pojedine datoteke). Pritom mora vrijediti:
+Write a program that ranks movies based on audience ratings.
+The name of the movie is also the name of the .txt file.
+For example, for the movie titled "Lord of the Data - Return of the Priority Queue," the corresponding file would be "Lord of the Data - Return of the Priority Queue.txt."
+Each file contains audience ratings (at least one!) for the movie with that title, and each rating is a natural number less than or equal to 5.
+It is necessary to create a structure `film` that contains all the mentioned data about a particular movie (movie title and all ratings for that movie,
+along with other data you think should be stored).
+Then, using an appropriate container (or adapter), store the data about all the movies whose names match the corresponding files (excluding the ".txt" extension),
+which the program receives as command line arguments (there is no need to check whether the file was opened successfully). The following must apply:
 
-Filmovi u tom spremniku (ili adapteru) sortirani su silazno prema prosječnoj ocjeni gledatelja, 
-tako da korisnik može dobiti film s najvećom prosječnom ocjenom u vremenu O(1) te ubaciti podatke o novom filmu u vremenu O(log n).
- Također, nemojte da se pri ubacivanju filma mora puno puta računati prosječna ocjena gledatelja za filmove koji su već u spremniku.
-Nakon učitavanja svih podataka,
- ispišite sve podatke o svim filmovima iz korištenog spremnika u silaznom poretku prema prosječnoj ocjeni filma 
- (dakle tako da je film s najvećom prosječnom ocjenom ispisan prvi). U komentar u kodu obrazložite izbor spremnika (ili adaptera) koji ste koristili.
+The movies in that container (or adapter) are sorted in descending order based on the average audience rating, 
+so that the user can get the movie with the highest average rating in O(1) time and insert a new movie's data in O(log n) time.
+Additionally, make sure that when inserting a movie, you do not have to recalculate the average audience rating for movies already in the container.
+After loading all the data, print all the data about all movies from the used container in descending order by the movie's average rating
+(so that the movie with the highest average rating is printed first). In the code comments, explain the choice of container (or adapter) you used.
 */
 
 #include <iostream>
@@ -25,79 +23,77 @@ Nakon učitavanja svih podataka,
 using namespace std;
 
 /*
-    pamtimo i prosjek kako ga ne bismo
-    morali stalno racunati
+    We store the average rating so that we don't have to
+    recalculate it constantly.
 */
 struct film{
-    string ime;
-    vector<int> ocjene;
-    double prosjek;
+    string name;
+    vector<int> ratings;
+    double average;
 };
 
 /*
-    omogucili smo ispisivanje filma pomocu >>
+    Enabled printing of movie details using >>
 */
-ostream &operator << (ostream &out, const film &film)
+ostream &operator << (ostream &out, const film &movie)
 {
-   out << "Naziv filma: " << film.ime << endl;
+   out << "Movie title: " << movie.name << endl;
 
-   out << "Ocjene: ";
-   for(int i = 0 ; i < film.ocjene.size() ; i++)
-        out << film.ocjene[i] << " ";
+   out << "Ratings: ";
+   for(int i = 0 ; i < movie.ratings.size() ; i++)
+        out << movie.ratings[i] << " ";
     out << endl;
 
-    out << "Prosjek: " << film.prosjek << endl;
+    out << "Average rating: " << movie.average << endl;
 
     return out;
 }
 
 /*
-    komparator koji usporeduje filmove na temelju 
-    prosjeka ocjena
+    Comparator that compares movies based on
+    their average ratings.
 */
-struct Usporedi {
-    bool operator()(film prvi, film drugi) {
-        return  prvi.prosjek <= drugi.prosjek ;
+struct Compare {
+    bool operator()(film first, film second) {
+        return first.average <= second.average;
     }
 };
 
-int main(int n, char* nazivi[]){
+int main(int n, char* names[]){
     /*
-        izabrao sam prioritetni red zbog zadovoljavaja
-        uvjeta slozenosti
+        I chose a priority queue to satisfy the 
+        complexity requirements.
     */
-    priority_queue<film,vector<film>,Usporedi> filmovi;
-    ifstream dat;
-    int ocjena;
+    priority_queue<film, vector<film>, Compare> movies;
+    ifstream file;
+    int rating;
 
     /*
-        ostatak koda je sasvim čitljiv :)
+        The rest of the code is perfectly readable :)
     */
-    for( auto p = nazivi+1 ; p != nazivi + n ; p++ ){
-        dat.open(string(*p) + ".txt");
+    for( auto p = names + 1 ; p != names + n ; p++ ){
+        file.open(string(*p) + ".txt");
 
-    	film film({string(*p)});
+    	film movie({string(*p)});
 
-        film.prosjek = 0;
-        while( dat >> ocjena ){
-            film.ocjene.push_back(ocjena);
-            film.prosjek += ocjena;
+        movie.average = 0;
+        while( file >> rating ){
+            movie.ratings.push_back(rating);
+            movie.average += rating;
         }
-        film.prosjek /= film.ocjene.size();
-        filmovi.push(film);
+        movie.average /= movie.ratings.size();
+        movies.push(movie);
         
-        dat.close();
+        file.close();
     }
-
 
     /*
-        ispis filmova
+        Printing the movies
     */
-    while( !filmovi.empty() ){
-        cout << filmovi.top();
-        filmovi.pop();
+    while( !movies.empty() ){
+        cout << movies.top();
+        movies.pop();
     }
 
-        
     return 0;
 }
