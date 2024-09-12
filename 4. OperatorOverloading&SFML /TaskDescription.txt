@@ -1,0 +1,9 @@
+In this task, it is necessary to illustrate the use of overloaded operators in SFML in the manner described in the following text.
+
+Three files are provided: the file *Lopta.h*, the file *Prozor.h*, and the file *main.cpp* (be sure to download all three files from the provided links).
+The files contain implementations of the *Lopta* class and the *Prozor* class, which you will need to extend.
+As their names suggest, the *Prozor* class represents a window with dimensions 800 x 600 and the title "Loptanje" (Ball Game), 
+while the *Lopta* class represents a circle that moves within the window and bounces off its edges. 
+Observe what is currently stored in each of these classes and which methods they currently have
+(you are free to add methods to the classes and store whatever is needed about these classes – if you change existing methods,
+be sure to mention it in the text field when submitting the solution!).
