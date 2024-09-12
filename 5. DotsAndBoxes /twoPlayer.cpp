@@ -40,7 +40,7 @@ void twoPlayer(sf::RenderWindow& window) {
             event.mouseButton.button == sf::Mouse::Left && !isMouseClicked) {
 
             switch (board.click(event.mouseButton.x, event.mouseButton.y, board.getPlayer())) {
-            case 0: //player nije napravio potez ili je dovröio kvadratiÊ
+            case 0: //player nije napravio potez ili je dovr≈°io kvadrati√¶
                 break;
             case 1: //player je odigrao, i red je na sljedem igracu
                 board.changePlayer();
